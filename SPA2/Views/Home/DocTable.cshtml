@@ -1,0 +1,154 @@
+﻿@model SPA2.Models.Data
+
+
+<table class="table">
+    <tr>
+        <th>
+            Имя столбца
+        </th>
+    </tr>
+    <tbody>
+        @for (int i = 0; i < Model.Caption.Split(Model.charDelimeter).Count(); i++)
+        {
+            <tr>
+                <td ondblclick=EditCeil("th_@(i)")>
+                    @using (Ajax.BeginForm("updateCeil", "Home",
+                            new AjaxOptions { UpdateTargetId = "th_" + Convert.ToString(i)}
+                            ))
+                    {
+                        <input type="hidden" id="th_@(i)inpt"
+                               name="ceil"
+                               value="@Model.Caption.Split(Model.charDelimeter)[i]"
+                               onkeypress="Press(event,id)"
+                               onblur="Close(id)"
+                               style="max-width:100%; width:100%" />
+
+                        <input type="hidden" name="row" value="@(i)" />
+                        <input type="hidden" id="th_@(i)form" />
+
+                    }
+                    <div id="th_@(i)">
+                        @Model.Caption.Split(Model.charDelimeter)[i]
+                    </div>
+                </td>
+            </tr>
+        }
+
+    </tbody>
+</table>
+<input id="rowsnum" type="hidden" value="@Model.file.Count()" />
+@Html.Partial("newCeil")
+<table class="table" >
+    <thead>
+        <tr>
+            @for (int i = 0; i < Model.Caption.Split(Model.charDelimeter).Count(); i++)
+            {
+                <th>
+                    <div id="th_@(i)h">
+                        @Model.Caption.Split(Model.charDelimeter)[i]
+                    </div>
+                </th>
+            }
+        </tr>
+    </thead>
+    <tbody id="dataBody">
+        @for (int i = 0; i < Model.file.Count(); i++)
+        {
+            string line = Model.file[i];
+            <tr>
+                @for (int j = 0; j < line.Split(Model.charDelimeter).Count(); j++)
+                {
+
+                    <td ondblclick=EditCeil("td_@(i)_@(j)") >
+                        @using (Ajax.BeginForm("updateCeil", "Home",
+                            new AjaxOptions { UpdateTargetId = "td_" + Convert.ToString(i) + "_" + Convert.ToString(j) }
+                            ))
+                        {
+                            <input type="hidden" id="td_@(i)_@(j)inpt"
+                                   name="ceil"
+                                   value="@Model.file[i].Split(Model.charDelimeter)[j]"
+                                   onkeypress="Press(event,id)"
+                                   onblur="Close(id)"
+                                   style="max-width:100%; width:100%" />
+
+                            <input type="hidden" name="col" value=@(j) />
+                            <input type="hidden" name="row" value="@(i)" />
+                            <input type="hidden" id="td_@(i)_@(j)form" />
+
+                        }
+                        <div id="td_@(i)_@(j)" name="td_@(i)_@(j)">
+                            @Model.file[i].Split(Model.charDelimeter)[j]
+                        </div>
+                    </td>
+                }
+            </tr>
+        }
+    </tbody>
+</table>
+<button type="button" class="btn btn-primary" onclick="newRow(@Model.colsNum)">Добавить строку</button>
+
+
+<script>
+    function EditCeil(idp) {
+        var td = document.getElementById(idp);
+        td.style.display = 'none';
+        var inpt = document.getElementById(idp + "inpt");
+        inpt.type = "text";
+        inpt.focus();
+    }
+
+
+
+    function Close(id) {
+        var inpt = document.getElementById(id);
+        var td = document.getElementById(id.replace('inpt', ''));
+        td.style.display = 'inline-block';
+        inpt.type = "hidden";
+        if (td.innerHTML != inpt.value) {
+            form = document.getElementById(id.replace('inpt', 'form'))
+            form.type = "submit";
+            form.click();
+            form.type = "hidden"
+            var th = document.getElementById(id.replace('inpt', 'h'));
+            th.innerHTML = inpt.value;
+        }
+        
+    }
+    function Press(e,id) {
+        if (e.keyCode == 13) {
+            Close(id);
+        }
+
+    }
+    function updateCaption(id) {
+        alert('sd');
+        var th1 = document.getElementById(id);
+        var th = document.getElementById(id + "h");
+        th.innerHTML = th1.innerHTML;
+    }
+    function newRow(numCol) {
+        var tbody = document.getElementById("dataBody")
+        var row = document.createElement("TR")
+        var nrow = document.getElementById("rowsnum").value;
+
+        for (let i = 0; i < numCol; i++) {
+            var td = document.createElement("TD");
+            td.setAttribute("ondblclick", 'EditCeil("td_' + nrow + '_' + i + '")')
+            td.innerHTML = "col";
+            CopyingTD = document.getElementById("copytd")
+            td.innerHTML = CopyingTD.innerHTML;
+            td.innerHTML = td.innerHTML.replace("td_a_a", "td_" + nrow + "_" + i);
+            td.innerHTML = td.innerHTML.replace("td_a_a", "td_" + nrow + "_" + i);
+            td.innerHTML = td.innerHTML.replace("td_a_a", "td_" + nrow + "_" + i);
+            td.innerHTML = td.innerHTML.replace("td_a_a", "td_" + nrow + "_" + i);
+            td.innerHTML = td.innerHTML.replace("curCol", i);
+            td.innerHTML = td.innerHTML.replace("curRow", nrow);
+            
+            row.appendChild(td);
+            
+        }
+
+        document.getElementById("rowsnum").value = Number(nrow) + 1;
+        tbody.appendChild(row);
+    }
+</script>
