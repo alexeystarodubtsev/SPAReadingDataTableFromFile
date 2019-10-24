@@ -6,5 +6,6 @@
        public string [] files { get; set; }
        public string [] directories { get; set; }
        public string curDirectory { get; set; }
+       public string prevdir { get; set; }
     }
 }

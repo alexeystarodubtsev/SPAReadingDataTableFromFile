@@ -146,10 +146,22 @@ namespace SPA2.Controllers
             Ceil.value = ceil;
             return PartialView(Ceil);
         }
-        public ActionResult ChooseFile()
+        public ActionResult Directory(string dir, string curDir)
+       {
+            return ChooseFile(dir, curDir);
+        }
+        public ActionResult ChooseFile(string dir, string curDir)
         {
+
             ListFiles lf = new ListFiles();
+            
             lf.curDirectory = AppDomain.CurrentDomain.BaseDirectory + "App_Data";
+            lf.prevdir = "";
+            if (curDir != null && dir!=null)
+            {
+                lf.curDirectory = lf.curDirectory + curDir + dir;
+                lf.prevdir = curDir;
+            }
             lf.files = System.IO.Directory.GetFiles(lf.curDirectory);
             lf.directories = System.IO.Directory.GetDirectories(lf.curDirectory);
             for (int i = 0; i< lf.files.Count(); i++)
@@ -160,6 +172,8 @@ namespace SPA2.Controllers
             {
                 lf.directories[i] = lf.directories[i].Replace(lf.curDirectory, "");
             }
+            lf.curDirectory = lf.curDirectory.Replace(AppDomain.CurrentDomain.BaseDirectory + "App_Data", "");
+            
             return PartialView(lf);
             //return HttpNotFound();
         }

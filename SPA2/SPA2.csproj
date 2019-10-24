@@ -244,6 +244,7 @@
     <Content Include="Views\Home\FileNull.cshtml" />
     <Content Include="Views\Home\Test.cshtml" />
     <Content Include="Views\Home\ChooseFile.cshtml" />
+    <Content Include="Views\Home\Directory.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

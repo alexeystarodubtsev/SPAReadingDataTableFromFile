@@ -1,6 +1,6 @@
 ﻿@model SPA2.Models.Settings
 @{
-    ViewBag.Title = "Home Page";
+    ViewBag.Title = "App for Read Text Files";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <div id="modDialog" class="modal fade">
@@ -14,7 +14,7 @@
         <div class="col" style="margin-top:20%">
 
             @Html.LabelFor(Model => Model.DBName, "Имя новой базы данных")
-            @Html.EditorFor(model => Model.DBName, new { htmlAttributes = new { @class = "form-control", @style = "max-width: 350px" } })
+            @Html.EditorFor(model => Model.DBName, new { htmlAttributes = new { @class = "form-control", @style = "max-width: 350px", @readonly = "readonly" } })
             @Html.LabelFor(Model => Model.filePath, "Путь к файлу")
             <div class="input-group mb-3">
                 @Html.EditorFor(model => Model.filePath, new { htmlAttributes = new { @class = "form-control", @style = "max-width: 350px", @readonly = "readonly" } })
@@ -72,9 +72,11 @@
                 $('#modDialog').modal('show');
             });
         }
-        function fileclick(path) {
+        function fileclick(name,dir) {
             var filepath = document.getElementById("filePath");
-            filepath.value = path;
+            filepath.value = dir + "\\" + name;
+            var db = document.getElementById("DBName");
+            db.value = name;
             var x = document.getElementById("closefilechoose");
             x.click();
         }
