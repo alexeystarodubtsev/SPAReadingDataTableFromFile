@@ -30,7 +30,6 @@ namespace SPA2.Controllers
                 return RedirectToAction("FileNull");
             }
             Models.Data data = new Models.Data();
-            //C:/Users/xiaomi/Desktop/f_tn_table_supplier.txt
             try
             {
                 data.file = System.IO.File.ReadAllLines(settings.filePath, Encoding.Default);
@@ -92,12 +91,7 @@ namespace SPA2.Controllers
             }
             return PartialView(data);
         }
-        public ActionResult About()
-        {
-            ViewBag.Message = "Your application description page.";
 
-            return View();
-        }
         public ActionResult updateCeil(string ceil, string row, string col)
          {
             //System.IO.File.WriteAllLines();
@@ -157,11 +151,6 @@ namespace SPA2.Controllers
             return PartialView(Ceil);
         }
 
-        public ActionResult Contact()
-        {
-            ViewBag.Message = "Your contact page.";
-
-            return View();
-        }
+       
     }
 }
