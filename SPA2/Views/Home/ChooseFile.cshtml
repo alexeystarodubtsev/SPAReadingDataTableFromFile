@@ -1,0 +1,29 @@
+﻿@model SPA2.Models.ListFiles
+<div class="modal-content">
+    <div class="modal-header">
+        <h4>Выберите файл</h4>
+        <button class="close" id="closefilechoose" data-dismiss="modal" area-hidden="true">X</button>
+    </div>
+    <div class="modal-body">
+        <div class="row">
+            @foreach (var dir in Model.directories)
+            {
+            <div class="col-md-2">
+                <img src="~/images/folder.jpg" class="getfolder" width="95%" style="max-width:60px" />
+                @dir.Replace("\\", "");
+            </div>
+            }
+            @foreach (var file in Model.files)
+            {
+                <div class="col-md-2" ondblclick="fileclick('@file.Replace("\\", "\\\\")')">
+                    <img src="~/images/file.png" id="~/images/file.png" class="getfile" width="95%" style="max-width:60px" />
+                    <p>
+                        @file.Replace("\\", "").TrimEnd(';');
+                    </p>
+                </div>
+            }
+            
+
+        </div>
+    </div>
+</div>

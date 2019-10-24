@@ -32,63 +32,59 @@ namespace SPA2.Controllers
             Models.Data data = new Models.Data();
             try
             {
-                data.file = System.IO.File.ReadAllLines(settings.filePath, Encoding.Default);
-             }
-            catch (Exception e)
-            {
-                string path = AppDomain.CurrentDomain.BaseDirectory + "App_Data\\f_tn_table_supplier.txt";
+                string path = AppDomain.CurrentDomain.BaseDirectory + "App_Data" + settings.filePath;
                 data.file = System.IO.File.ReadAllLines(path, Encoding.Default);
-                Models.CurrentData.filePath = path;
-                
+                CurrentData.filePath = path;
+            }
+            catch (System.IO.FileNotFoundException)
+            {
 
             }
-            finally
+            
+            switch (settings.delim)
             {
-                switch (settings.delim)
-                {
-                    case Models.Delimeter.space:
-                        data.charDelimeter = ' ';
-                        break;
-                    case Models.Delimeter.semicolon:
-                        data.charDelimeter = ';';
-                        break;
-                    case Models.Delimeter.other:
-                        data.charDelimeter = settings.otherDelim;
-                        break;
-                    default:
-                        data.charDelimeter = '\t';
-                        break;
-                }
+                case Models.Delimeter.space:
+                    data.charDelimeter = ' ';
+                    break;
+                case Models.Delimeter.semicolon:
+                    data.charDelimeter = ';';
+                    break;
+                case Models.Delimeter.other:
+                    data.charDelimeter = settings.otherDelim;
+                    break;
+                default:
+                    data.charDelimeter = '\t';
+                    break;
+            }
                 
 
-                data.colsNum = 0;
-                foreach (string line in data.file)
-                {
-                    int linecount = line.Split(data.charDelimeter).Count();
-                    if (data.colsNum < linecount)
-                        data.colsNum = linecount;
-                }
-                data.Caption = "";
-                if (settings.hasCaption)
-                {
-                    data.Caption = data.file[0];
-                    data.file = data.file.Where(m => m != data.file.First()).ToArray();
+            data.colsNum = 0;
+            foreach (string line in data.file)
+            {
+                int linecount = line.Split(data.charDelimeter).Count();
+                if (data.colsNum < linecount)
+                    data.colsNum = linecount;
+            }
+            data.Caption = "";
+            if (settings.hasCaption)
+            {
+                data.Caption = data.file[0];
+                data.file = data.file.Where(m => m != data.file.First()).ToArray();
                     
-                }
-                else
-                    for (int i = 1; i <= data.colsNum; i++)
-                    {
-                        data.Caption = data.Caption + "col_" + i + data.charDelimeter;
+            }
+            else
+                for (int i = 1; i <= data.colsNum; i++)
+                {
+                    data.Caption = data.Caption + "col_" + i + data.charDelimeter;
                         
 
-                    }
-                data.Caption = data.Caption.TrimEnd(data.charDelimeter);
-                Models.CurrentData.file = data.file;
+                }
+            data.Caption = data.Caption.TrimEnd(data.charDelimeter);
+            Models.CurrentData.file = data.file;
                 
-                Models.CurrentData.hasCaption = settings.hasCaption;
-                Models.CurrentData.delimeter = data.charDelimeter;
-                Models.CurrentData.caption = data.Caption;
-            }
+            Models.CurrentData.hasCaption = settings.hasCaption;
+            Models.CurrentData.delimeter = data.charDelimeter;
+            Models.CurrentData.caption = data.Caption;
             return PartialView(data);
         }
 
@@ -150,7 +146,25 @@ namespace SPA2.Controllers
             Ceil.value = ceil;
             return PartialView(Ceil);
         }
+        public ActionResult ChooseFile()
+        {
+            ListFiles lf = new ListFiles();
+            lf.curDirectory = AppDomain.CurrentDomain.BaseDirectory + "App_Data";
+            lf.files = System.IO.Directory.GetFiles(lf.curDirectory);
+            lf.directories = System.IO.Directory.GetDirectories(lf.curDirectory);
+            for (int i = 0; i< lf.files.Count(); i++)
+            {
+                lf.files[i] = lf.files[i].Replace(lf.curDirectory, "");
+            }
+            for (int i = 0; i < lf.directories.Count(); i++)
+            {
+                lf.directories[i] = lf.directories[i].Replace(lf.curDirectory, "");
+            }
+            return PartialView(lf);
+            //return HttpNotFound();
+        }
+         
+    
 
-       
     }
 }
