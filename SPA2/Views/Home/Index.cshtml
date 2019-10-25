@@ -15,12 +15,12 @@
             <h6>
                 @Html.LabelFor(Model => Model.DBName, "Имя базы данных")
             </h6>
-            @Html.EditorFor(model => Model.DBName, new { htmlAttributes = new { @class = "form-control", @style = "max-width: 350px", @readonly = "readonly" } })
+            @Html.EditorFor(model => Model.DBName, new { htmlAttributes = new { @class = "form-control", @style = "max-width: 450px", @readonly = "readonly" } })
             <h6>
                 @Html.LabelFor(Model => Model.filePath, "Путь к файлу")
             </h6>
             <div class="input-group mb-3">
-                @Html.EditorFor(model => Model.filePath, new { htmlAttributes = new { @class = "form-control", @style = "max-width: 350px", @readonly = "readonly" } })
+                @Html.EditorFor(model => Model.filePath, new { htmlAttributes = new { @class = "form-control", @style = "max-width: 450px", @readonly = "readonly" } })
                 <div class="input-group-append">
                     <button class="btn btn-outline-secondary" type="button" onclick="choosefile(event)">...</button>
                 </div>
@@ -52,7 +52,9 @@
             <div class="custom-control custom-radio form-group">
                 @Html.RadioButtonFor(model => model.delim, SPA2.Models.Delimeter.other, new { @class = "custom-control-input", id = "Other" })
                 @Html.LabelFor(model => model.delim, "Другой", new { @class = "custom-control-label", @for = "Other" })
-                @Html.EditorFor(model => model.otherDelim, new { htmlAttributes = new { @class = "form-control", @style = "max-width: 100px", @maxlength = "1", @onclick = "otherDel()" } })
+                @*@Html.EditorFor(model => model.otherDelim, new { htmlAttributes = new { @class = "form-control", @style = "max-width: 100px", @maxlength = "1", @onclick = "otherDel()" } })*@
+                @Html.EditorFor(model => model.otherDelim, new { htmlattributes = new { @style = "border-left:none; border-right:none; border-top:none", @maxlength = "1", @onclick = "otherdel()" } })
+                
             </div>
 
 
