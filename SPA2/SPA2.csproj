@@ -157,6 +157,7 @@
     <Compile Include="Models\CurrentData.cs" />
     <Compile Include="Models\Data.cs" />
     <Compile Include="Models\Delimeter.cs" />
+    <Compile Include="Models\Error.cs" />
     <Compile Include="Models\ListFiles.cs" />
     <Compile Include="Models\Settings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

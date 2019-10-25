@@ -1,5 +1,6 @@
-﻿<div class="validation-summary-errors text-danger">
+﻿@model SPA2.Models.Error
+<div class="validation-summary-errors text-danger">
     <ul>
-        <li>Файл не выбран</li>
+        <li>@Model.text</li>
     </ul>
 </div>

@@ -12,10 +12,13 @@
     @using (Ajax.BeginForm("DocTable", "Home", new AjaxOptions { UpdateTargetId = "Docfile" }))
     {
         <div class="col" style="margin-top:20%">
-
-            @Html.LabelFor(Model => Model.DBName, "Имя новой базы данных")
+            <h6>
+                @Html.LabelFor(Model => Model.DBName, "Имя базы данных")
+            </h6>
             @Html.EditorFor(model => Model.DBName, new { htmlAttributes = new { @class = "form-control", @style = "max-width: 350px", @readonly = "readonly" } })
-            @Html.LabelFor(Model => Model.filePath, "Путь к файлу")
+            <h6>
+                @Html.LabelFor(Model => Model.filePath, "Путь к файлу")
+            </h6>
             <div class="input-group mb-3">
                 @Html.EditorFor(model => Model.filePath, new { htmlAttributes = new { @class = "form-control", @style = "max-width: 350px", @readonly = "readonly" } })
                 <div class="input-group-append">
@@ -24,10 +27,16 @@
             </div>
 
             <div class="custom-control custom-checkbox">
-                @Html.CheckBoxFor(model => model.hasCaption, new { @class = "custom-checkbox custom-control-input" })
-                @Html.LabelFor(model => model.hasCaption, "Первая строка содержит заголовки", new { @class = "custom-control-label" })
+                
+                <h6>
+                    @Html.CheckBoxFor(model => model.hasCaption, new { @class = "custom-checkbox custom-control-input" })
+                    @Html.LabelFor(model => model.hasCaption, "Первая строка содержит заголовки", new { @class = "custom-control-label" })
+                </h6>
+                
             </div>
-            <div>Разделитель:</div>
+            <h6>
+                Разделитель
+            </h6>
             <div class="custom-control custom-radio">
                 @Html.RadioButtonFor(model => model.delim, SPA2.Models.Delimeter.tab, new { @class = "custom-control-input", id = "Tab" })
                 @Html.LabelFor(model => model.delim, "Знак табуляции", new { @class = "custom-control-label", @for = "Tab" })
@@ -80,5 +89,68 @@
             var x = document.getElementById("closefilechoose");
             x.click();
         }
+        function EditCeil(idp) {
+        var td = document.getElementById(idp);
+        td.style.display = 'none';
+        var inpt = document.getElementById(idp + "inpt");
+        inpt.type = "text";
+        inpt.focus();
+    }
+
+
+
+    function Close(id) {
+        var inpt = document.getElementById(id);
+        var td = document.getElementById(id.replace('inpt', ''));
+        td.style.display = 'inline-block';
+        inpt.type = "hidden";
+        if (td.innerHTML != inpt.value) {
+            form = document.getElementById(id.replace('inpt', 'form'))
+            form.type = "submit";
+            form.click();
+            form.type = "hidden"
+            var th = document.getElementById(id.replace('inpt', 'h'));
+            th.innerHTML = inpt.value;
+        }
+        
+    }
+    function Press(e,id) {
+        if (e.keyCode == 13) {
+            Close(id);
+        }
+
+    }
+    function updateCaption(id) {
+        alert('sd');
+        var th1 = document.getElementById(id);
+        var th = document.getElementById(id + "h");
+        th.innerHTML = th1.innerHTML;
+    }
+    function newRow(numCol) {
+        var tbody = document.getElementById("dataBody")
+        var row = document.createElement("TR")
+        var nrow = document.getElementById("rowsnum").value;
+
+        for (let i = 0; i < numCol; i++) {
+            var td = document.createElement("TD");
+            td.setAttribute("ondblclick", 'EditCeil("td_' + nrow + '_' + i + '")')
+            td.innerHTML = "col";
+            CopyingTD = document.getElementById("copytd")
+            td.innerHTML = CopyingTD.innerHTML;
+            td.innerHTML = td.innerHTML.replace("td_a_a", "td_" + nrow + "_" + i);
+            td.innerHTML = td.innerHTML.replace("td_a_a", "td_" + nrow + "_" + i);
+            td.innerHTML = td.innerHTML.replace("td_a_a", "td_" + nrow + "_" + i);
+            td.innerHTML = td.innerHTML.replace("td_a_a", "td_" + nrow + "_" + i);
+            td.innerHTML = td.innerHTML.replace("curCol", i);
+            td.innerHTML = td.innerHTML.replace("curRow", nrow);
+            
+            row.appendChild(td);
+            
+        }
+
+        document.getElementById("rowsnum").value = Number(nrow) + 1;
+        tbody.appendChild(row);
+        }
+        
     </script>
 }

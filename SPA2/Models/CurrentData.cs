@@ -11,7 +11,7 @@
         public static char delimeter { get; set; }
         public static bool hasCaption { get; set; }
         public static string caption { get; set; }
-        
+        public static string errortext { get; set; }
     }
 
 
