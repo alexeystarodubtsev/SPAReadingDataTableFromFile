@@ -45,7 +45,9 @@ function Close(id) {
 }
 function Press(e,id) {
     if (e.keyCode == 13) {
-    Close(id);
+    //Close(id);
+        var inpt = document.getElementById(id);
+        inpt.type = "hidden";
 }
 
 }
