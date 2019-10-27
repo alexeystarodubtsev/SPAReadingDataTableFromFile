@@ -48,7 +48,7 @@ function Press(e,id) {
     //Close(id);
         var inpt = document.getElementById(id);
         inpt.type = "hidden";
-}
+    }
 
 }
 
