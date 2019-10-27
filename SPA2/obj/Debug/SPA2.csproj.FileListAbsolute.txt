@@ -100,3 +100,6 @@ C:\Users\xiaomi\source\repos\SPA2\SPA2\obj\Debug\SPA2.csproj.CoreCompileInputs.c
 C:\Users\xiaomi\source\repos\SPA2\SPA2\obj\Debug\SPA2.csproj.CopyComplete
 C:\Users\xiaomi\source\repos\SPA2\SPA2\obj\Debug\SPA2.dll
 C:\Users\xiaomi\source\repos\SPA2\SPA2\obj\Debug\SPA2.pdb
+C:\Users\xiaomi\source\repos\SPA2\SPA2\bin\Web.config
+C:\Users\xiaomi\source\repos\SPA2\SPA2\bin\Web.Debug.config
+C:\Users\xiaomi\source\repos\SPA2\SPA2\bin\Web.Release.config

@@ -1,0 +1,70 @@
+﻿@model SPA2.Models.Settings
+@{
+    ViewBag.Title = "App for Read Text Files";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div id="modDialog" class="modal fade">
+    <div id="dialogContent" class="modal-dialog"></div>
+</div>
+
+<div class="row">
+    @Html.Partial("Test")
+    @using (Ajax.BeginForm("DocTable", "Home", new AjaxOptions { UpdateTargetId = "Docfile" }))
+    {
+        <div class="col" style="margin-top:20%">
+            <h6>
+                @Html.LabelFor(Model => Model.DBName, "Имя базы данных")
+            </h6>
+            @Html.EditorFor(model => Model.DBName, new { htmlAttributes = new { @class = "form-control", @style = "max-width: 450px", @readonly = "readonly" } })
+            <h6>
+                @Html.LabelFor(Model => Model.filePath, "Путь к файлу")
+            </h6>
+            <div class="input-group mb-3">
+                @Html.EditorFor(model => Model.filePath, new { htmlAttributes = new { @class = "form-control", @style = "max-width: 450px", @readonly = "readonly" } })
+                <div class="input-group-append">
+                    <button class="btn btn-outline-secondary" type="button" onclick="choosefile(event)">...</button>
+                </div>
+            </div>
+
+            <div class="custom-control custom-checkbox">
+                
+                <h6>
+                    @Html.CheckBoxFor(model => model.hasCaption, new { @class = "custom-checkbox custom-control-input" })
+                    @Html.LabelFor(model => model.hasCaption, "Первая строка содержит заголовки", new { @class = "custom-control-label" })
+                </h6>
+                
+            </div>
+            <h6>
+                Разделитель
+            </h6>
+            <div class="custom-control custom-radio">
+                @Html.RadioButtonFor(model => model.delim, SPA2.Models.Delimeter.tab, new { @class = "custom-control-input", id = "Tab" })
+                @Html.LabelFor(model => model.delim, "Знак табуляции", new { @class = "custom-control-label", @for = "Tab" })
+            </div>
+            <div class="custom-control custom-radio">
+                @Html.RadioButtonFor(model => model.delim, SPA2.Models.Delimeter.space, new { @class = "custom-control-input", id = "Space" })
+                @Html.LabelFor(model => model.delim, "Пробел", new { @class = "custom-control-label", @for = "Space" })
+            </div>
+            <div class="custom-control custom-radio">
+                @Html.RadioButtonFor(model => model.delim, SPA2.Models.Delimeter.semicolon, new { @class = "custom-control-input", id = "Semic" })
+                @Html.LabelFor(model => model.delim, "Точка с запятой", new { @class = "custom-control-label", @for = "Semic" })
+            </div>
+            <div class="custom-control custom-radio form-group">
+                @Html.RadioButtonFor(model => model.delim, SPA2.Models.Delimeter.other, new { @class = "custom-control-input", id = "Other" })
+                @Html.LabelFor(model => model.delim, "Другой", new { @class = "custom-control-label", @for = "Other" })
+                @*@Html.EditorFor(model => model.otherDelim, new { htmlAttributes = new { @class = "form-control", @style = "max-width: 100px", @maxlength = "1", @onclick = "otherDel()" } })*@
+                @Html.EditorFor(model => model.otherDelim, new { htmlattributes = new { @style = "border-left:none; border-right:none; border-top:none", @maxlength = "1", @onclick = "otherdel()" } })
+                
+            </div>
+
+
+
+            <div class="col-auto my-1">
+                <button type="submit" class="btn btn-primary">Показать результаты</button>
+            </div>
+        </div>
+
+    }
+
+    <div class="col" id="Docfile" style="border-left: 1px solid grey"></div>
+</div>

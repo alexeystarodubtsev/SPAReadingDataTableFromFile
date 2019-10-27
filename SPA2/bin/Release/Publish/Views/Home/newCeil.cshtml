@@ -1,0 +1,18 @@
+﻿<div id="copytd" style="display:none">
+    @using (Ajax.BeginForm("updateCeil", "Home",
+        new AjaxOptions { UpdateTargetId = "td_a_a" }
+        ))
+    {
+        <input type="hidden" id="td_a_ainpt"
+               name="ceil"
+               onkeypress="Press(event,id)"
+               onblur="Close(id)"
+               style="max-width:100%; width:100%" />
+
+        <input type="hidden" name="col"  value="curCol"/>
+        <input type="hidden" name="row" value="curRow"/>
+        <input type="hidden" id="td_a_aform" />
+
+    }
+    <div id="td_a_a" ></div>
+</div>

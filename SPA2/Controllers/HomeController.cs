@@ -11,6 +11,7 @@ namespace SPA2.Controllers
 {
     public class HomeController : Controller
     {
+        CurrentData currentData;
         [HttpGet]
         public ActionResult Index()
         {
@@ -20,17 +21,29 @@ namespace SPA2.Controllers
         [HttpGet]
         public ActionResult FileNull()
         {
-
-            return View(new Error(CurrentData.errortext));
+            try
+            {
+                currentData = (CurrentData)Session["currentData"];
+            }
+            catch
+            {
+                return View(new Error("Неопознанная ошибка"));
+            }
+            return View(new Error(currentData.errortext));
+            
         }
         
 
         [HttpPost]
         public ActionResult DocTable(Models.Settings settings)
         {
+            currentData = new CurrentData();
+            
+            
             if (settings.filePath is null)
             {
-                CurrentData.errortext = "Файл не выбран";
+                currentData.errortext = "Файл не выбран";
+                Session["currentData"] = currentData;
                 return RedirectToAction("FileNull");
                
                 
@@ -42,17 +55,29 @@ namespace SPA2.Controllers
                 data.file = System.IO.File.ReadAllLines(path, Encoding.Default);
                 if (data.file.Count() == 0)
                 {
-                    CurrentData.errortext = "В выбранном файле нет записей";
+                    currentData.errortext = "В выбранном файле нет записей";
+                    Session["currentData"] = currentData;
                     return RedirectToAction("FileNull");
                 }
-                CurrentData.filePath = path;
+                currentData.filePath = path;
             }
             catch (System.IO.FileNotFoundException)
             {
-                CurrentData.errortext = "Такого файла не существует, выберите другой";
+                
+                currentData.errortext = "Такого файла не существует, выберите другой";
+                Session["currentData"] = currentData;
                 return RedirectToAction("FileNull");
             }
-            
+            catch (System.IO.IOException)
+            {
+
+                currentData.errortext = "Данный файл занят другим процессом";
+                Session["currentData"] = currentData;
+                return RedirectToAction("FileNull");
+            }
+
+
+
             switch (settings.delim)
             {
                 case Models.Delimeter.space:
@@ -87,7 +112,8 @@ namespace SPA2.Controllers
                 }
                 catch(IndexOutOfRangeException)
                 {
-                    CurrentData.errortext = "В выбранном файле нет записей";
+                    currentData.errortext = "В выбранном файле нет записей";
+                    Session["currentData"] = currentData;
                     return RedirectToAction("FileNull");
                     
                 }
@@ -101,72 +127,85 @@ namespace SPA2.Controllers
 
                 }
             data.Caption = data.Caption.TrimEnd(data.charDelimeter);
-            Models.CurrentData.file = data.file;
+            currentData.file = data.file;
                 
-            Models.CurrentData.hasCaption = settings.hasCaption;
-            Models.CurrentData.delimeter = data.charDelimeter;
-            Models.CurrentData.caption = data.Caption;
+            currentData.hasCaption = settings.hasCaption;
+            currentData.delimeter = data.charDelimeter;
+            currentData.caption = data.Caption;
+            Session["currentData"] = currentData;
             return PartialView(data);
         }
         [HttpPost]
         public ActionResult updateCeil(string ceil, string row, string col)
          {
+            try
+            {
+                currentData = (CurrentData)Session["currentData"];
+            }
+            catch (Exception)
+            {
+                RedirectToAction("FileNull");
+            }
             //System.IO.File.WriteAllLines();
             try
             {
                 if (col == null)
                 {
-                    Models.CurrentData.hasCaption = true;
-                    string[] caption = Models.CurrentData.caption.Split(Models.CurrentData.delimeter);
+                    currentData.hasCaption = true;
+                    string[] caption = currentData.caption.Split(currentData.delimeter);
                     caption[Convert.ToInt32(row)] = ceil;
-                    Models.CurrentData.caption = String.Join(Convert.ToString(Models.CurrentData.delimeter), caption);
-                    CurrentData.caption = CurrentData.caption.TrimEnd(CurrentData.delimeter);
+                    currentData.caption = String.Join(Convert.ToString(currentData.delimeter), caption);
+                    currentData.caption = currentData.caption.TrimEnd(currentData.delimeter);
                 }
                 else
                 {
-                    if (Models.CurrentData.file.Count() - 1 < Convert.ToInt32(row))
+                    if (currentData.file.Count() - 1 < Convert.ToInt32(row))
                     {
-                        List<string> ls = CurrentData.file.ToList();
+                        List<string> ls = currentData.file.ToList();
                         string s1 = "";
-                        for (int i = 0; i < CurrentData.caption.Trim(CurrentData.delimeter).Split(CurrentData.delimeter).Count(); i++)
+                        for (int i = 0; i < currentData.caption.Trim(currentData.delimeter).Split(currentData.delimeter).Count(); i++)
                         {
                             if (i == Convert.ToInt32(col))
                                 s1 = ceil;
-                            if (i < CurrentData.caption.Trim(CurrentData.delimeter).Split(CurrentData.delimeter).Count() - 1)
-                                s1 += CurrentData.delimeter;
+                            if (i < currentData.caption.Trim(currentData.delimeter).Split(currentData.delimeter).Count() - 1)
+                                s1 += currentData.delimeter;
                         }
                         ls.Add(s1);
-                        CurrentData.file = ls.ToArray();
+                        currentData.file = ls.ToArray();
                     }
                     else
                     {
-                        string s1 = CurrentData.file[Convert.ToInt32(row)];
-                        string[] sarr = s1.Split(CurrentData.delimeter);
+                        string s1 = currentData.file[Convert.ToInt32(row)];
+                        string[] sarr = s1.Split(currentData.delimeter);
                         sarr[Convert.ToInt32(col)] = ceil;
                         s1 = "";
                         for (int i = 0; i < sarr.Length; i++)
                         {
                             s1 = s1 + sarr[i];
                             if (i < sarr.Length - 1)
-                                s1 = s1 + CurrentData.delimeter;
+                                s1 = s1 + currentData.delimeter;
                         }
 
-                        CurrentData.file[Convert.ToInt32(row)] = s1;
+                        currentData.file[Convert.ToInt32(row)] = s1;
                     }
                 }
             }
             catch(Exception)
             {
-                CurrentData.errortext = "Что-то пошло не так.."; //не должны сюда попасть, но вдруг
+                if (currentData != null)
+                {
+                    currentData.errortext = "Что-то пошло не так.."; //не должны сюда попасть, но вдруг
+                    Session["currentData"] = currentData;
+                }
                 return RedirectToAction("FileNull");
             }
             List<string> DataForFIle = new List<string>();
-            if (CurrentData.hasCaption)
-                DataForFIle.Add(CurrentData.caption);
-            DataForFIle.AddRange(CurrentData.file);
+            if (currentData.hasCaption)
+                DataForFIle.Add(currentData.caption);
+            DataForFIle.AddRange(currentData.file);
             try
             {
-                System.IO.File.WriteAllLines(CurrentData.filePath, DataForFIle, Encoding.Default);
+                System.IO.File.WriteAllLines(currentData.filePath, DataForFIle, Encoding.Default);
             }
             catch(Exception)
             {
@@ -176,6 +215,7 @@ namespace SPA2.Controllers
             }
             Models.Ceil Ceil = new Models.Ceil();
             Ceil.value = ceil;
+            Session["currentData"] = currentData;
             return PartialView(Ceil);
         }
         public ActionResult Directory(string dir, string curDir)
@@ -184,6 +224,14 @@ namespace SPA2.Controllers
         }
         public ActionResult ChooseFile(string dir, string curDir)
         {
+            try
+            {
+                currentData = (CurrentData)Session["currentData"];
+            }
+            catch (Exception)
+            {
+                RedirectToAction("FileNull");
+            }
 
             ListFiles lf = new ListFiles();
             
@@ -201,7 +249,8 @@ namespace SPA2.Controllers
             }
             catch(System.IO.DirectoryNotFoundException)
             {
-                CurrentData.errortext = "Невозможно получить доступ к папке, попробуйте снова"; //для случаев, когда папка была удалена после получения списка
+                currentData.errortext = "Невозможно получить доступ к папке, попробуйте снова"; //для случаев, когда папка была удалена после получения списка
+                Session["currentData"] = currentData;
                 return RedirectToAction("FileNull");
             }
             
@@ -214,8 +263,10 @@ namespace SPA2.Controllers
                 lf.directories[i] = lf.directories[i].Replace(lf.curDirectory, "");
             }
             lf.curDirectory = lf.curDirectory.Replace(AppDomain.CurrentDomain.BaseDirectory + "App_Data", "");
-            
+
+            Session["currentData"] = currentData;
             return PartialView(lf);
+
             //return HttpNotFound();
         } 
          

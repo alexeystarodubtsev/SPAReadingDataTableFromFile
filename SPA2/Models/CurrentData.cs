@@ -6,12 +6,12 @@
 
     public class CurrentData
     {
-        public static string filePath { get; set; }
-        public static string[] file { get; set; }
-        public static char delimeter { get; set; }
-        public static bool hasCaption { get; set; }
-        public static string caption { get; set; }
-        public static string errortext { get; set; }
+        public string filePath { get; set; }
+        public string[] file { get; set; }
+        public char delimeter { get; set; }
+        public bool hasCaption { get; set; }
+        public string caption { get; set; }
+        public string errortext { get; set; }
     }
 
 

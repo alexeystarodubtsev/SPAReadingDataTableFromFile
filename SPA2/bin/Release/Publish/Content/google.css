@@ -1,0 +1,37 @@
+﻿body {
+}
+.quantumWizTextinputSimpleinputInput {
+    -webkit-box-flex: 1;
+    box-flex: 1;
+    -webkit-flex-grow: 1;
+    flex-grow: 1;
+    -webkit-flex-shrink: 1;
+    flex-shrink: 1;
+    background-color: transparent;
+    border: none;
+    display: block;
+    font: 400 16px Roboto,RobotoDraft,Helvetica,Arial,sans-serif;
+    margin: 0;
+    min-width: 0%;
+    outline: none;
+    padding: .125em 0;
+    z-index: 0
+}
+.quantumWizTextinputSimpleinputContentAreaWithEmbeddedContent > .quantumWizTextinputSimpleinputInput::-ms-clear, .quantumWizTextinputSimpleinputContentAreaWithEmbeddedContent > .quantumWizTextinputSimpleinputInput::-ms-reveal {
+    display: none
+}
+.quantumWizTextinputSimpleinputEl.isDisabled .quantumWizTextinputSimpleinputInput {
+    color: rgba(0,0,0,0.38)
+}
+.quantumWizTextinputSimpleinputEl.isDisabled > .quantumWizTextinputSimpleinputMainContent > .quantumWizTextinputSimpleinputUnderline {
+    background: none;
+    border-bottom: 1px dotted rgba(0,0,0,0.38)
+}
+
+.quantumWizTextinputSimpleinputUnderline {
+    background-color: rgba(0,0,0,0.12);
+    height: 1px;
+    margin: 0;
+    padding: 0;
+    width: 100%
+}

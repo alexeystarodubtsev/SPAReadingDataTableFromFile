@@ -1,0 +1,47 @@
+﻿@model SPA2.Models.ListFiles
+<div class="modal-content">
+    <div class="modal-header">
+
+        <button type="button" class="btn btn-light" onclick="prevDir()" style="display:none" id="btnprev">&laquo; Previous</button>
+        <input type="hidden" id="prevDirectory"/>
+        <div style="margin-left:20px">
+            <h4>Выберите файл</h4>
+        </div>
+        
+        <button class="close" id="closefilechoose" data-dismiss="modal" area-hidden="true">X</button>
+    </div>
+    <div class="modal-body">
+        @Html.Partial("Directory")
+    </div>
+</div>
+<script>
+    function HideDir(id) {
+        var prevDir = document.getElementById("prevDirectory");
+        prevDir.value = id;
+        var btnprev = document.getElementById("btnprev");
+        btnprev.style.display = "";
+        var curDir = document.getElementById(id);
+        curDir.style.display = "none";
+        
+    }
+    function OpenDir(id) {
+        var sbmt = document.getElementById(id);
+        sbmt.type = "submit";
+        sbmt.click();
+        sbmt.type = "hidden";
+    }
+    function prevDir() {
+        var prevDirInpt = document.getElementById("prevDirectory");
+        if (prevDirInpt.value == "dir") {
+            var btnprev = document.getElementById("btnprev");
+            btnprev.style.display = "none";
+        }
+        var prdir = document.getElementById(prevDirInpt.value);
+        prdir.style.display = "";
+        var childDir = prdir.parentElement.getElementsByClassName("child1")[0];
+        childDir.innerHTML = "";
+        prevDirInpt.value = prdir.getElementsByClassName("prevDir")[0].value;
+        
+    }
+
+</script>

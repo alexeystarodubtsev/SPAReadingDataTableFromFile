@@ -1,0 +1,34 @@
+﻿<div id="dir@(Model.curDirectory.Replace("\\", "\\\\"))">
+   <input type="hidden" class="prevDir" value="dir@(Model.prevdir.Replace("\\", "\\\\"))"/>
+    <div class="row">
+        @foreach (var dir in Model.directories)
+        {
+            using (Ajax.BeginForm("Directory", "Home", new AjaxOptions { UpdateTargetId = "newDir" + Model.curDirectory.Replace("\\", "\\\\"), OnSuccess = "HideDir('dir" + Model.curDirectory.Replace("\\", "\\\\\\\\") + "')" }))
+            {
+                <div class="col-sm-4" ondblclick="OpenDir('sbmt@(Model.curDirectory.Replace("\\", "\\\\") + dir.Replace("\\", "\\\\"))')">
+                    <img src="~/images/folder.jpg" style="max-width:80px" />
+                    <p>
+                        @dir.Replace("\\", "")
+                    </p>
+                    <input type="hidden" name="dir" value="@dir" />
+                    <input type="hidden" name="curDir" value="@Model.curDirectory" />
+                    <input type="hidden" id="sbmt@(Model.curDirectory + dir)" />
+                </div>
+
+            }
+        }
+        @foreach (var file in Model.files)
+        {
+
+            <div class="col-sm-4" ondblclick="fileclick('@file.Replace("\\", "")','@Model.curDirectory.Replace("\\", "\\\\")')">
+                <img src="~/images/file.png" id="~/images/file.png" style="max-width:80px" />
+                <p>
+                    @file.Replace("\\", "")
+                </p>
+            </div>
+        }
+
+
+    </div>
+</div>
+<div id="newDir@(Model.curDirectory)" class="child1"></div>
